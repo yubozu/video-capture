@@ -1,8 +1,8 @@
-#include "../video_capture/font_data.h"
+#include "font_data.h"
 #include <stdint.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include "../video_capture/picture_t.h"
+#include "picture_t.h"
 
 void osd_print(struct picture_t *pic, const char *str)
 {

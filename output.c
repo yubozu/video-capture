@@ -7,7 +7,7 @@
 #include <errno.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include "../video_capture/picture_t.h"
+#include "picture_t.h"
 #include "matroska_ebml.h"
 #include "simplerecorder.h"
 
