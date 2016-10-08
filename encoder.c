@@ -8,7 +8,7 @@
 #include <sys/types.h>
 #include <time.h>
 #include <x264.h>
-#include "../video_capture/picture_t.h"
+#include "picture_t.h"
 
 #define DEFAULT_FPS 25
 
