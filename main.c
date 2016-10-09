@@ -9,7 +9,7 @@
 #include <signal.h>
 #include <time.h>
 #include "picture_t.h"
-#include "simplerecorder.h"
+#include "capture.h"
 
 static int recording;
 
@@ -21,21 +21,9 @@ int main()
 {
 	int i;
 	struct picture_t pic;
-	struct encoded_pic_t encoded_pic;
 	errno = 0;
 	if(!camera_init(&pic))
 		goto error_cam;
-	if(!encoder_init(&pic)){
-		fprintf(stderr,"failed to initialize encoder\n");
-		goto error_encoder;
-	}
-	if(!output_init(&pic))
-		goto error_output;
-	if(!encoder_encode_headers(&encoded_pic))
-		goto error_output;
-	if(!output_write_headers(&encoded_pic))
-		goto error_output;
-	encoder_release(&encoded_pic);
 	if(!camera_on())
 		goto error_cam_on;
 	if(signal(SIGINT, stop_recording) == SIG_ERR){
@@ -47,21 +35,13 @@ int main()
 	for(i=0; recording; i++){
 		if(!camera_get_frame(&pic))
 			break;
-		if(!encoder_encode_frame(&pic, &encoded_pic))
-			break;
-		if(!output_write_frame(&encoded_pic))
-			break;
-		encoder_release(&encoded_pic);
+		// output pic.
 	}
 	printf("\n%d frames recorded\n", i);
 
 error_signal:
 	camera_off();
 error_cam_on:
-	output_close();
-error_output:
-	encoder_close();
-error_encoder:
 	camera_close();
 error_cam:
 	return 0;

@@ -2,11 +2,11 @@ SOURCE=$(wildcard *.c)
 OBJS=$(patsubst %.c,%.o,$(SOURCE))
 CC=gcc
 
-all: simplerecorder
+all: capture
 
-simplerecorder: $(OBJS)
-	$(CC) -Wall -o $@ $^ -lv4lconvert -lx264
+capture: $(OBJS)
+	$(CC) -Wall -o $@ $^ -lv4lconvert
 %.o: %.c
 	$(CC) -Wall -c $< -o $@
 clean:
-	rm $(OBJS) simplerecorder
+	rm $(OBJS) capture
