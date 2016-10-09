@@ -12,12 +12,7 @@
 #include "simplerecorder.h"
 
 static int recording;
-static char osd_string[20];
-static void gen_osd_info()
-{
-	time_t t = time(0);
-	strftime(osd_string, 20, "%Y-%m-%d %H:%M:%S",localtime(&t));
-}
+
 void stop_recording(int param)
 {
 	recording = 0;
@@ -34,8 +29,6 @@ int main()
 		fprintf(stderr,"failed to initialize encoder\n");
 		goto error_encoder;
 	}
-//	if(!preview_init(&pic))
-//		goto error_preview;
 	if(!output_init(&pic))
 		goto error_output;
 	if(!encoder_encode_headers(&encoded_pic))
@@ -54,8 +47,6 @@ int main()
 	for(i=0; recording; i++){
 		if(!camera_get_frame(&pic))
 			break;
-		gen_osd_info();
-		osd_print(&pic, osd_string);
 		if(!encoder_encode_frame(&pic, &encoded_pic))
 			break;
 		if(!output_write_frame(&encoded_pic))
@@ -69,8 +60,6 @@ error_signal:
 error_cam_on:
 	output_close();
 error_output:
-//	preview_close();
-//error_preview:
 	encoder_close();
 error_encoder:
 	camera_close();
